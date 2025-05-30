@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>그 운지할라 카지노</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: #eee;
+    }
+    header {
+      background-color: #c0392b;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      cursor: default;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: bold;
+      transition: color 0.3s;
+      cursor: pointer;
+      user-select: none;
+    }
+    nav a:hover {
+      color: #f39c12;
+    }
+    #userDisplay {
+      margin-left: 1.5rem;
+      font-weight: bold;
+      color: #f39c12;
+      user-select: none;
+    }
+    #logoutBtn {
+      background-color: #e74c3c;
+      border: none;
+      color: white;
+      font-weight: bold;
+      padding: 0.3rem 0.8rem;
+      border-radius: 4px;
+      margin-left: 0.8rem;
+      cursor: pointer;
+      display: none;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+    #logoutBtn:hover {
+      background-color: #c0392b;
+    }
+    .hero {
+      background: url('https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=1470&q=80') center/cover no-repeat;
+      height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-shadow: 0 0 15px rgba(0,0,0,0.7);
+    }
+    .hero h2 {
+      font-size: 3rem;
+      margin: 0;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+    }
+    main {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    section.games {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .game-card {
+      background-color: #222;
+      border-radius: 8px;
+      width: 300px;
+      padding: 1rem;
+      box-shadow: 0 0 15px rgba(195, 57, 43, 0.7);
+      transition: transform 0.3s;
+      cursor: pointer;
+      user-select: none;
+    }
+    .game-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #f39c12;
+    }
+    .game-card img {
+      width: 100%;
+      border-radius: 6px;
+    }
+    .game-card h3 {
+      margin: 0.75rem 0 0.5rem 0;
+    }
+    .game-card p {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #1a1a1a;
+      color: #777;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+    }
+    @media(max-width: 768px) {
+      section.games {
+        flex-direction: column;
+        align-items: center;
+      }
+      .game-card {
+        width: 90%;
+      }
+    }
+
+    /* 슬롯 머신 스타일 */
+    #slotMachine {
+      display: none;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    #slotMachine .slot-machine {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    #slotMachine .slot {
+      background: #222;
+      border: 3px solid #c0392b;
+      border-radius: 10px;
+      width: 100px;
+      height: 100px;
+      font-size: 3rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      box-shadow: 0 0 10px #c0392b;
+      margin: 0 auto;
+      transition: transform 0.2s ease-in-out;
+    }
+    #slotMachine button {
+      background-color: #c0392b;
+      border: none;
+      color: white;
+      font-size: 1.3rem;
+      padding: 0.7rem 2rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      box-shadow: 0 0 8px #c0392b;
+    }
+    #slotMachine button:hover {
+      background-color: #e74c3c;
+    }
+    #slotMachine .result {
+      margin-top: 1.5rem;
+      font-size: 1.5rem;
+      min-height: 2rem;
+      color: #f39c12;
+      font-weight: bold;
+    }
+
+    /* 뒤로가기 버튼 */
+    #backBtn {
+      display: none;
+      margin: 1rem auto;
+      padding: 0.5rem 1.5rem;
+      font-size: 1rem;
+      background-color: #c0392b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 0 8px #c0392b;
+    }
+    #backBtn:hover {
+      background-color: #e74c3c;
+    }
+
+    /* 로그인 / 회원가입 모달 공통 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #222;
+      border-radius: 10px;
+      padding: 2rem 2.5rem;
+      box-shadow: 0 0 30px rgba(195, 57, 43, 0.8);
+      width: 320px;
+      max-width: 90%;
+      z-index: 1000;
+    }
+    .modal h2 {
+      color: #f39c12;
+      text-align: center;
+      margin-bottom: 1rem;
+      user-select: none;
+    }
+    .modal label {
+      display: block;
+      color: #eee;
+      margin-bottom: 0.3rem;
+      user-select: none;
+    }
+    .modal input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    .modal button {
+      width: 100%;
+      padding: 0.7rem;
+      background: #c0392b;
+      border: none;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+    .modal button:hover {
+      background: #e74c3c;
+    }
+    .modal .message {
+      margin-top: 1rem;
+      text-align: center;
+      font-weight: bold;
+    }
+    .modal .toggle-link {
+      margin-top: 1rem;
+      text-align: center;
+      color: #f39c12;
+      cursor: pointer;
+      user-select: none;
+      text-decoration: underline;
+    }
+    /* 배경 어둡게 처리 */
+    #modalOverlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 900;
+    }
+
+    /* 슬롯 개수 선택 영역 */
+    #slotCountSelector {
+      margin-bottom: 1rem;
+      color: #f39c12;
+      font-weight: bold;
+      user-select: none;
+    }
+    #slotCountSelector label {
+      margin-right: 1.5rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>그 운지할라 카지노</h1>
+    <nav>
+      <a>홈</a>
+      <a>게임</a>
+      <a>프로모션</a>
+      <a>고객센터</a>
+      <a id="loginNav">로그인</a>
+      <span id="userDisplay"></span>
+      <button id="logoutBtn">로그아웃</button>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h2>그 운지할라 카지노에 오신 것을 환영합니다!</h2>
+    <p>행운을 잡아라! 최고의 슬롯 머신과 함께 즐기세요.</p>
+  </div>
+
+  <main>
+    <section class="games">
+      <div class="game-card" id="slotGameBtn" tabindex="0" role="button" aria-pressed="false" aria-label="슬롯 게임 시작">
+        <img src="https://cdn-icons-png.flaticon.com/512/1199/1199525.png" alt="슬롯 게임 이미지" />
+        <h3>슬롯 머신</h3>
+        <p>운을 시험해 보세요! 3칸 또는 5칸 슬롯 선택 가능.</p>
+      </div>
+      <div class="game-card" id="comingSoon" tabindex="0" role="button" aria-label="준비 중인 게임">
+        <img src="https://cdn-icons-png.flaticon.com/512/3176/3176290.png" alt="준비 중 게임 이미지" />
+        <h3>블랙잭</h3>
+        <p>곧 출시됩니다!</p>
+      </div>
+      <div class="game-card" id="comingSoon2" tabindex="0" role="button" aria-label="준비 중인 게임">
+        <img src="https://cdn-icons-png.flaticon.com/512/1000/1000992.png" alt="준비 중 게임 이미지" />
+        <h3>룰렛</h3>
+        <p>곧 출시됩니다!</p>
+      </div>
+    </section>
+
+    <section id="slotMachine" aria-live="polite" aria-label="슬롯 머신 게임">
+      <div id="slotCountSelector" aria-label="슬롯 칸 수 선택">
+        <label><input type="radio" name="slotCount" value="3" checked /> 3칸 슬롯</label>
+        <label><input type="radio" name="slotCount" value="5" /> 5칸 슬롯</label>
+      </div>
+      <div class="slot-machine" id="slotsContainer" aria-live="polite" aria-atomic="true" aria-relevant="additions removals"></div>
+      <button id="spinBtn" aria-label="슬롯 머신 돌리기">돌리기</button>
+      <div class="result" id="slotResult" role="alert"></div>
+    </section>
+    <button id="backBtn" aria-label="슬롯 머신 종료하고 게임 목록으로 돌아가기">뒤로가기</button>
+  </main>
+
+  <!-- 로그인 모달 -->
+  <div id="modalOverlay"></div>
+  <div class="modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <h2 id="loginTitle">로그인</h2>
+    <label for="loginUsername">아이디</label>
+    <input type="text" id="loginUsername" autocomplete="username" />
+    <label for="loginPassword">비밀번호</label>
+    <input type="password" id="loginPassword" autocomplete="current-password" />
+    <button id="loginSubmit">로그인</button>
+    <div class="message" id="loginMessage"></div>
+    <div class="toggle-link" id="showRegister">회원가입 하러가기</div>
+  </div>
+
+  <!-- 회원가입 모달 -->
+  <div class="modal" id="registerModal" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
+    <h2 id="registerTitle">회원가입</h2>
+    <label for="registerUsername">아이디</label>
+    <input type="text" id="registerUsername" autocomplete="username" />
+    <label for="registerPassword">비밀번호</label>
+    <input type="password" id="registerPassword" autocomplete="new-password" />
+    <button id="registerSubmit">회원가입</button>
+    <div class="message" id="registerMessage"></div>
+    <div class="toggle-link" id="showLogin">로그인 하러가기</div>
+  </div>
+
+  <footer>
+    &copy; 2025 그 운지할라 카지노. All rights reserved.
+  </footer>
+
+  <script>
+    // --- 로그인, 회원가입 로직 ---
+    const loginNav = document.getElementById('loginNav');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userDisplay = document.getElementById('userDisplay');
+
+    const loginModal = document.getElementById('loginModal');
+    const registerModal = document.getElementById('registerModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+
+    const showRegister = document.getElementById('showRegister');
+    const showLogin = document.getElementById('showLogin');
+
+    const loginUsername = document.getElementById('loginUsername');
+    const loginPassword = document.getElementById('loginPassword');
+    const loginSubmit = document.getElementById('loginSubmit');
+    const loginMessage = document.getElementById('loginMessage');
+
+    const registerUsername = document.getElementById('registerUsername');
+    const registerPassword = document.getElementById('registerPassword');
+    const registerSubmit = document.getElementById('registerSubmit');
+    const registerMessage = document.getElementById('registerMessage');
+
+    let currentUser = null;
+
+    function showModal(modal) {
+      modal.style.display = 'block';
+      modalOverlay.style.display = 'block';
+    }
+    function hideModal(modal) {
+      modal.style.display = 'none';
+      modalOverlay.style.display = 'none';
+      loginMessage.textContent = '';
+      registerMessage.textContent = '';
+      loginUsername.value = '';
+      loginPassword.value = '';
+      registerUsername.value = '';
+      registerPassword.value = '';
+    }
+
+    loginNav.addEventListener('click', () => {
+      showModal(loginModal);
+    });
+    modalOverlay.addEventListener('click', () => {
+      hideModal(loginModal);
+      hideModal(registerModal);
+    });
+
+    showRegister.addEventListener('click', () => {
+      hideModal(loginModal);
+      showModal(registerModal);
+    });
+    showLogin.addEventListener('click', () => {
+      hideModal(registerModal);
+      showModal(loginModal);
+    });
+
+    registerSubmit.addEventListener('click', () => {
+      const username = registerUsername.value.trim();
+      const password = registerPassword.value.trim();
+      if (!username || !password) {
+        registerMessage.textContent = '아이디와 비밀번호를 모두 입력하세요.';
+        return;
+      }
+      if (localStorage.getItem('user_' + username)) {
+        registerMessage.textContent = '이미 존재하는 아이디입니다.';
+        return;
+      }
+      // 저장 (간단한 저장, 암호화 없음)
+      localStorage.setItem('user_' + username, password);
+      registerMessage.style.color = '#2ecc71';
+      registerMessage.textContent = '회원가입 성공! 로그인해주세요.';
+      setTimeout(() => {
+        hideModal(registerModal);
+        showModal(loginModal);
+        registerMessage.style.color = '#e74c3c';
+      }, 1500);
+    });
+
+    loginSubmit.addEventListener('click', () => {
+      const username = loginUsername.value.trim();
+      const password = loginPassword.value.trim();
+      if (!username || !password) {
+        loginMessage.textContent = '아이디와 비밀번호를 모두 입력하세요.';
+        return;
+      }
+      const storedPassword = localStorage.getItem('user_' + username);
+      if (storedPassword === null) {
+        loginMessage.textContent = '존재하지 않는 아이디입니다.';
+        return;
+      }
+      if (storedPassword !== password) {
+        loginMessage.textContent = '비밀번호가 틀렸습니다.';
+        return;
+      }
+      currentUser = username;
+      userDisplay.textContent = currentUser + ' 님 환영합니다!';
+      loginNav.style.display = 'none';
+      logoutBtn.style.display = 'inline-block';
+      hideModal(loginModal);
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      currentUser = null;
+      userDisplay.textContent = '';
+      loginNav.style.display = 'inline-block';
+      logoutBtn.style.display = 'none';
+      // 슬롯 머신 비활성화 시도
+      hideSlotMachine();
+    });
+
+    // --- 슬롯 머신 기능 ---
+    const slotGameBtn = document.getElementById('slotGameBtn');
+    const slotMachineSection = document.getElementById('slotMachine');
+    const slotsContainer = document.getElementById('slotsContainer');
+    const spinBtn = document.getElementById('spinBtn');
+    const slotResult = document.getElementById('slotResult');
+    const backBtn = document.getElementById('backBtn');
+    const slotCountSelector = document.getElementById('slotCountSelector');
+
+    // 슬롯 아이콘 배열 (7️⃣ 추가)
+    const slotIcons = ['🍒', '🍋', '🔔', '💎', '🍉', '🍀', '7️⃣'];
+
+    let slotCount = 3; // 기본 슬롯칸 개수
+    let spinning = false;
+    let spinIntervals = [];
+
+    function createSlots(num) {
+      slotsContainer.innerHTML = '';
+      for(let i=0; i<num; i++) {
+        const slot = document.createElement('div');
+        slot.classList.add('slot');
+        slot.textContent = '❓';
+        slotsContainer.appendChild(slot);
+      }
+    }
+
+    function getRandomIcon() {
+      return slotIcons[Math.floor(Math.random() * slotIcons.length)];
+    }
+
+    function spinSlots() {
+      if (spinning) return;
+      spinning = true;
+      slotResult.textContent = '';
+      spinBtn.disabled = true;
+
+      // 회전 애니메이션용 타이머 저장
+      spinIntervals = [];
+
+      const slots = slotsContainer.querySelectorAll('.slot');
+      slots.forEach((slot, i) => {
+        let count = 0;
+        const maxSpins = 20 + i * 10; // 슬롯마다 멈추는 시간이 다름
+        spinIntervals[i] = setInterval(() => {
+          // 아이콘 랜덤 변경
+          slot.textContent = getRandomIcon();
+          // 슬롯 아이콘 돌리는 듯한 회전 애니메이션 (transform)
+          slot.style.transform = `rotate(${count * 36}deg)`;
+          count++;
+          if (count > maxSpins) {
+            clearInterval(spinIntervals[i]);
+            slot.style.transform = 'rotate(0deg)';
+            if (i === slots.length - 1) {
+              spinning = false;
+              spinBtn.disabled = false;
+              checkResult();
+            }
+          }
+        }, 50);
+      });
+    }
+
+    function checkResult() {
+      const slots = slotsContainer.querySelectorAll('.slot');
+      const results = Array.from(slots).map(slot => slot.textContent);
+      // 모두 같은 아이콘이면 승리
+      const allEqual = results.every(icon => icon === results[0]);
+      if (allEqual) {
+        slotResult.textContent = `🎉 축하합니다! 모두 ${results[0]}! 대박! 🎉`;
+      } else {
+        slotResult.textContent = `아쉽네요... 다시 도전해보세요!`;
+      }
+    }
+
+    slotCountSelector.addEventListener('change', (e) => {
+      slotCount = parseInt(e.target.value);
+      createSlots(slotCount);
+      slotResult.textContent = '';
+    });
+
+    slotGameBtn.addEventListener('click', () => {
+      if (!currentUser) {
+        alert('먼저 로그인하세요!');
+        showModal(loginModal);
+        return;
+      }
+      slotMachineSection.style.display = 'block';
+      slotGameBtn.style.display = 'none';
+      backBtn.style.display = 'inline-block';
+      createSlots(slotCount);
+      slotResult.textContent = '';
+    });
+
+    spinBtn.addEventListener('click', () => {
+      spinSlots();
+    });
+
+    backBtn.addEventListener('click', () => {
+      hideSlotMachine();
+    });
+
+    function hideSlotMachine() {
+      slotMachineSection.style.display = 'none';
+      slotGameBtn.style.display = 'block';
+      backBtn.style.display = 'none';
+      slotResult.textContent = '';
+    }
+
+    // 초기 슬롯 생성
+    createSlots(slotCount);
+
+  </script>
+</body>
+</html>
